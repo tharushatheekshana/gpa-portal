@@ -66,7 +66,11 @@ export function Login({ error: initialError }: LoginProps) {
     <div className="login-container">
       <div className="login-card glass-panel animate-fade-in">
         <div className="login-header">
-          <h1 className="text-gradient">GPA Portal</h1>
+          <div style={{ marginBottom: '1rem', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '2px', color: 'rgba(255, 255, 255, 0.6)' }}>
+            <span style={{ display: 'block', marginBottom: '4px' }}>Sabaragamuwa University of Sri Lanka</span>
+            <span style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.4)', fontWeight: 500 }}>Faculty of Computing</span>
+          </div>
+          <h1 className="text-gradient" style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>GPA Portal</h1>
           <p>{step === 1 ? 'Access your academic performance' : 'Enter verification code'}</p>
         </div>
 
@@ -90,7 +94,7 @@ export function Login({ error: initialError }: LoginProps) {
             {message && <div className="success-message" style={{ color: '#4ade80', fontSize: '0.9rem', marginBottom: '1rem', textAlign: 'center' }}>{message}</div>}
 
             <button type="submit" className="login-button pulse-hover" disabled={isLoading}>
-              {isLoading ? 'Sending Link...' : 'Send Magic Link'}
+              {isLoading ? 'Sending Access Link...' : 'Continue to Dashboard'}
             </button>
           </form>
         ) : (
