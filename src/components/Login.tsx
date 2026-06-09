@@ -122,7 +122,7 @@ export function Login({ error: initialError }: LoginProps) {
             {message && <div className="success-message" style={{ color: '#4ade80', fontSize: '0.9rem', marginBottom: '1rem', textAlign: 'center' }}>{message}</div>}
 
             <button type="submit" className="login-button pulse-hover" disabled={isLoading}>
-              {isLoading ? 'Sending Access Link...' : 'Continue to Dashboard'}
+              {isLoading ? 'Sending OTP...' : 'Continue to Dashboard'}
             </button>
           </form>
         ) : (
