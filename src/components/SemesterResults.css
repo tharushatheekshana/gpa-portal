@@ -1,0 +1,183 @@
+.semester-card {
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.semester-header {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.semester-header:hover {
+  background-color: var(--bg-glass-hover);
+}
+
+.semester-info h3 {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.semester-meta {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.semester-stats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.gpa-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.gpa-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-secondary);
+}
+
+.gpa-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.expand-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.expand-btn.expanded {
+  transform: rotate(180deg);
+}
+
+.semester-content {
+  padding: 0 24px 24px 24px;
+  border-top: 1px solid var(--border-glass);
+}
+
+.courses-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.courses-table th {
+  text-align: left;
+  padding: 12px 16px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--border-glass);
+  white-space: nowrap;
+}
+
+.courses-table td {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.courses-table td:nth-child(2) {
+  white-space: normal;
+  min-width: 180px;
+}
+
+.courses-table tr:last-child td {
+  border-bottom: none;
+}
+
+.center-col {
+  text-align: center;
+}
+
+.course-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--accent-primary);
+  background: rgba(99, 102, 241, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.grade-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.grade-A {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399; /* Emerald */
+}
+
+.grade-B {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa; /* Blue */
+}
+
+.grade-C {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24; /* Amber */
+}
+
+.grade-D, .grade-E {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171; /* Red */
+}
+
+.non-gpa-row {
+  opacity: 0.8;
+}
+
+.non-gpa-badge-small {
+  margin-left: 8px;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--accent-secondary);
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  .courses-table th:nth-child(3),
+  .courses-table td:nth-child(3),
+  .courses-table th:nth-child(5),
+  .courses-table td:nth-child(5) {
+    display: none;
+  }
+  
+  .semester-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .semester-stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
