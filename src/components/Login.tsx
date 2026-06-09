@@ -46,8 +46,7 @@ export function Login({ error: initialError }: LoginProps) {
     const { error: signInError } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        shouldCreateUser: true,
-        emailRedirectTo: window.location.origin
+        shouldCreateUser: true
       }
     });
 
