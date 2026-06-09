@@ -8,6 +8,7 @@ interface LoginProps {
 
 export function Login({ error: initialError }: LoginProps) {
   const [studentId, setStudentId] = useState('');
+  const [otp, setOtp] = useState('');
   const [step, setStep] = useState<1 | 2>(1);
   const [isLoading, setIsLoading] = useState(false);
   const [localError, setLocalError] = useState('');
@@ -60,6 +61,33 @@ export function Login({ error: initialError }: LoginProps) {
     setIsLoading(false);
   };
 
+  const handleVerifyOtp = async (e: FormEvent) => {
+    e.preventDefault();
+    setLocalError('');
+    setMessage('');
+    
+    if (!otp.trim()) return;
+
+    setIsLoading(true);
+
+    const id = studentId.trim();
+    const email = id.toLowerCase() === 'tharushatheekshana25@gmail.com' 
+      ? id.toLowerCase() 
+      : `${id.toLowerCase()}@ms.sab.ac.lk`;
+
+    const { error: verifyError } = await supabase.auth.verifyOtp({
+      email,
+      token: otp.trim(),
+      type: 'email'
+    });
+
+    if (verifyError) {
+      setLocalError('Invalid or expired code. Please try again.');
+    }
+    
+    setIsLoading(false);
+  };
+
 
 
   return (
@@ -98,22 +126,46 @@ export function Login({ error: initialError }: LoginProps) {
             </button>
           </form>
         ) : (
-          <div className="magic-link-sent" style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✉️</div>
-            <h2 style={{ color: 'white', marginBottom: '1rem' }}>Check your email!</h2>
-            <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '2rem' }}>
-              We've sent a magic login link to <strong>{studentId.toLowerCase() === 'tharushatheekshana25@gmail.com' ? studentId.toLowerCase() : `${studentId.trim().toLowerCase()}@ms.sab.ac.lk`}</strong>.<br/><br/>
-              Click the link in the email to automatically log into your dashboard.
-            </p>
+          <form onSubmit={handleVerifyOtp} className="login-form">
+            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✉️</div>
+              <h2 style={{ color: 'white', marginBottom: '0.5rem' }}>Check your email</h2>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem' }}>
+                We sent a 6-digit code to <strong>{studentId.toLowerCase() === 'tharushatheekshana25@gmail.com' ? studentId.toLowerCase() : `${studentId.trim().toLowerCase()}@ms.sab.ac.lk`}</strong>
+              </p>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="otp">6-Digit Code</label>
+              <input
+                type="text"
+                id="otp"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                placeholder="000000"
+                autoComplete="off"
+                disabled={isLoading}
+                maxLength={6}
+                style={{ textAlign: 'center', letterSpacing: '4px', fontSize: '1.25rem', fontWeight: 'bold' }}
+                required
+              />
+            </div>
+            
+            {error && <div className="error-message">{error}</div>}
+
+            <button type="submit" className="login-button pulse-hover" disabled={isLoading || otp.length < 6}>
+              {isLoading ? 'Verifying...' : 'Verify & Login'}
+            </button>
+
             <button 
               type="button" 
-              onClick={() => { setStep(1); setLocalError(''); setMessage(''); }} 
+              onClick={() => { setStep(1); setOtp(''); setLocalError(''); setMessage(''); }} 
               className="back-button"
-              style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.7)', width: '100%', padding: '0.75rem', borderRadius: '8px', cursor: 'pointer', transition: 'all 0.3s' }}
+              style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.7)', width: '100%', padding: '0.75rem', borderRadius: '8px', cursor: 'pointer', transition: 'all 0.3s', marginTop: '10px' }}
             >
-              Try a different ID
+              Back to Login
             </button>
-          </div>
+          </form>
         )}
 
         {step === 1 && (
