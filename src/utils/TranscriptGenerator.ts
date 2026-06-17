@@ -8,19 +8,56 @@ export const generateTranscriptPDF = (student: Student) => {
   doc.setFont('helvetica', 'bold');
   doc.text('Unofficial Academic Transcript', 105, 20, { align: 'center' });
   
-  doc.setFontSize(12);
+  let leftY = 40;
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Name: ${student.name}`, 20, 40);
-  doc.text(`Student ID: ${student.studentId}`, 20, 48);
   
-  doc.text(`Cumulative GPA: ${student.cgpa.toFixed(2)}`, 190, 40, { align: 'right' });
-  doc.text(`Total GPA Credits: ${student.gpaCredits}`, 190, 48, { align: 'right' });
-  doc.text(`Total Modules: ${student.semesters.reduce((acc, sem) => acc + sem.courses.length, 0)}`, 190, 56, { align: 'right' });
+  // Name (left column, width 85mm)
+  const nameLines = doc.splitTextToSize(`Name: ${student.name}`, 85);
+  doc.text(nameLines, 20, leftY);
+  leftY += nameLines.length * 6;
+  
+  // Student ID (left column)
+  doc.text(`Student ID: ${student.studentId}`, 20, leftY);
+  leftY += 6;
+  
+  // Program (left column, width 85mm)
+  const programLines = doc.splitTextToSize(`Program: ${student.program}`, 85);
+  doc.text(programLines, 20, leftY);
+  leftY += programLines.length * 6;
+  
+  let rightY = 40;
+  
+  // Cumulative GPA (right column, aligned right at 190)
+  doc.text('Cumulative GPA:', 115, rightY);
+  doc.setFont('helvetica', 'bold');
+  doc.text(student.cgpa.toFixed(2), 190, rightY, { align: 'right' });
+  doc.setFont('helvetica', 'normal');
+  rightY += 6;
+  
+  // Total GPA Credits (right column)
+  doc.text('Total GPA Credits:', 115, rightY);
+  doc.text(student.gpaCredits.toString(), 190, rightY, { align: 'right' });
+  rightY += 6;
+  
+  // Total Credits (right column)
+  doc.text('Total Credits:', 115, rightY);
+  doc.text(student.totalCredits.toString(), 190, rightY, { align: 'right' });
+  rightY += 6;
+  
+  // Total Modules (right column)
+  doc.text('Total Modules:', 115, rightY);
+  const totalModules = student.semesters.reduce((acc, sem) => acc + sem.courses.length, 0).toString();
+  doc.text(totalModules, 190, rightY, { align: 'right' });
+  rightY += 6;
+  
+  // Calculate maximum height reached by either column to place the divider line and start semesters
+  const maxHeaderY = Math.max(leftY, rightY);
   
   doc.setLineWidth(0.5);
-  doc.line(20, 65, 190, 65);
+  doc.line(20, maxHeaderY + 4, 190, maxHeaderY + 4);
   
-  let y = 80;
+  let y = maxHeaderY + 12;
   
   student.semesters.forEach(sem => {
     if (y > 250) {

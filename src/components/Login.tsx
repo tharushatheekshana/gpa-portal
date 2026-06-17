@@ -28,7 +28,7 @@ export function Login({ error: initialError }: LoginProps) {
 
     setIsLoading(true);
     
-    let email = '';
+    let email: string;
 
     if (id.toLowerCase() === 'tharushatheekshana25@gmail.com') {
       email = id.toLowerCase();

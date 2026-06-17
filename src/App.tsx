@@ -13,32 +13,6 @@ function App() {
   const [loginError, setLoginError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    // Check active session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user?.email) {
-        handleSessionUser(session.user.email);
-      } else {
-        setIsLoading(false);
-      }
-    });
-
-    // Listen for auth changes (e.g. successful OTP verification)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN') {
-        if (session?.user?.email) {
-          handleSessionUser(session.user.email);
-        }
-      } else if (event === 'SIGNED_OUT') {
-        setCurrentStudent(null);
-        setIsAdmin(false);
-        setIsLoading(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   const handleSessionUser = async (email: string) => {
     setIsLoading(true);
     
@@ -65,6 +39,32 @@ function App() {
     }
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    // Check active session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user?.email) {
+        handleSessionUser(session.user.email);
+      } else {
+        setIsLoading(false);
+      }
+    });
+
+    // Listen for auth changes (e.g. successful OTP verification)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN') {
+        if (session?.user?.email) {
+          handleSessionUser(session.user.email);
+        }
+      } else if (event === 'SIGNED_OUT') {
+        setCurrentStudent(null);
+        setIsAdmin(false);
+        setIsLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();

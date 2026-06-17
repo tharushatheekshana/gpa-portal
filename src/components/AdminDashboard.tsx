@@ -28,16 +28,21 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const [tempGrade, setTempGrade] = useState<string>('');
 
   useEffect(() => {
-    loadStudents();
+    let active = true;
+    const load = async () => {
+      setIsLoading(true);
+      const data = await fetchAllStudentsBasic();
+      if (active) {
+        setStudents(data);
+        setFilteredStudents(data);
+        setIsLoading(false);
+      }
+    };
+    load();
+    return () => {
+      active = false;
+    };
   }, []);
-
-  const loadStudents = async () => {
-    setIsLoading(true);
-    const data = await fetchAllStudentsBasic();
-    setStudents(data);
-    setFilteredStudents(data);
-    setIsLoading(false);
-  };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase();
@@ -52,7 +57,7 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
   const openStudentModal = async (studentId: string) => {
     setIsModalLoading(true);
     // Show modal immediately with loading state
-    setSelectedStudent({ studentId } as any); // Temporary stub
+    setSelectedStudent({ studentId } as Student); // Temporary stub
     const data = await fetchStudentData(studentId);
     if (data) {
       setSelectedStudent(data);
